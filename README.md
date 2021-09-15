@@ -1,6 +1,7 @@
 # calendar_app
 
-A new Flutter project.
+プロジェクト詳細
+https://hungry-politician-ce1.notion.site/39fdff01c8f74e88b114c86c5902046e
 
 ## Getting Started
 
