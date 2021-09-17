@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'calendar.dart';
+import 'screens/calendar_screen.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Calendar(),
+      home: CalendarScreen(),
     );
   }
 }
