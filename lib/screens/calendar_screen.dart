@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'add_task.dart';
 
 import 'package:calendar_app/screens/task_screen.dart';
 
@@ -98,7 +99,79 @@ class _CalendarScreen extends State<CalendarScreen> {
                   backgroundColor: Colors.transparent,
                   builder: (context) => Container(
                     height: MediaQuery.of(context).size.height * 0.70,
-                    child: TaskScreen(),
+                    child: Container(
+                      color: Color(0xff7C7C7C).withOpacity(1),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              spreadRadius: 1.0,
+                              blurRadius: 10.0,
+                              offset: Offset(10, 10),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25, vertical: 25),
+                          child: Column(
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  Text(
+                                    'Task',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 200),
+                                  ),
+                                  FloatingActionButton(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.black,
+                                    onPressed: () {
+                                      // Provider.of<TaskData>(context, listen: false).addTasks(newTask);
+                                      // Navigator.pop(context);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AddTask(),
+                                          ));
+                                    },
+                                    child: Icon(Icons.add),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                child: Column(
+                                  children: [
+                                    ListView(
+                                      shrinkWrap: true,
+                                      children: _getEventForDay(_selectedDay!)
+                                          .map((event) => ListTile(
+                                                title: Text(event.toString()),
+                                              ))
+                                          .toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ).whenComplete(() => {_calendarFormat = CalendarFormat.month});
               }
@@ -106,23 +179,8 @@ class _CalendarScreen extends State<CalendarScreen> {
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
             },
-            // calendarStyle: CalendarStyle(
-            //   todayTextStyle: TextStyle(
-            //     color: Colors.blue,
-            //   ),
-
-            //   selectedTextStyle: TextStyle(color: Theme.of(context).primaryColor),
-            // ),
             locale: 'ja_JP',
           ),
-          // ListView(
-          //   shrinkWrap: true,
-          //   children: _getEventForDay(_selectedDay!)
-          //       .map((event) => ListTile(
-          //             title: Text(event.toString()),
-          //           ))
-          //       .toList(),
-          // ),
         ],
       ),
     );
