@@ -19,39 +19,45 @@ class _CalendarScreen extends State<CalendarScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   Map<DateTime, List> _eventsList = {};
+  bool isDone = false;
   @override
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
     //サンプルのイベントリスト
     _eventsList = {
-      DateTime.now().subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
-      DateTime.now(): ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
+      DateTime.now().subtract(Duration(days: 2)): [
+        [
+          true,
+          '課題提出',
+          ['資料', '12時まで']
+        ],
+        [
+          true,
+          'プレゼン日',
+          ['パソコン', 'やる気']
+        ]
+      ],
+      DateTime.now(): [
+        [true, '誕生日プレゼント買う'],
+        [true, '会議'],
+        [false, 'ジム'],
+        [false, 'お風呂洗う']
+      ],
       DateTime.now().add(Duration(days: 1)): [
-        'Event A8',
-        'Event B8',
-        'Event C8',
-        'Event D8'
+        [false, 'バイト'],
+        [false, 'Loft行く'],
+        [false, '資料室行く'],
+        [false, '参考書買う']
       ],
-      DateTime.now().add(Duration(days: 3)):
-          Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
       DateTime.now().add(Duration(days: 7)): [
-        'Event A10',
-        'Event B10',
-        'Event C10'
+        [false, '散髪'],
+        [false, 'おばあちゃんの家行く'],
+        [false, '漫画返す']
       ],
-      DateTime.now().add(Duration(days: 11)): ['Event A11', 'Event B11'],
-      DateTime.now().add(Duration(days: 17)): [
-        'Event A12',
-        'Event B12',
-        'Event C12',
-        'Event D12'
-      ],
-      DateTime.now().add(Duration(days: 22)): ['Event A13', 'Event B13'],
-      DateTime.now().add(Duration(days: 26)): [
-        'Event A14',
-        'Event B14',
-        'Event C14'
+      DateTime.now().add(Duration(days: 11)): [
+        [false, 'シフト提出'],
+        [false, '面接']
       ],
     };
   }
@@ -159,8 +165,30 @@ class _CalendarScreen extends State<CalendarScreen> {
                                     ListView(
                                       shrinkWrap: true,
                                       children: _getEventForDay(_selectedDay!)
-                                          .map((event) => ListTile(
-                                                title: Text(event.toString()),
+                                          .map((event) => Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(5),
+                                                    ),
+                                                    color: Colors.blue,
+                                                  ),
+                                                  child: ListTile(
+                                                    leading: Checkbox(
+                                                      value: event[0],
+                                                      onChanged: (value) {
+                                                        event[0] = value;
+                                                        setState(() {});
+                                                      },
+                                                    ),
+                                                    title: Text(
+                                                      event[1].toString(),
+                                                    ),
+                                                  ),
+                                                ),
                                               ))
                                           .toList(),
                                     ),
@@ -173,7 +201,7 @@ class _CalendarScreen extends State<CalendarScreen> {
                       ),
                     ),
                   ),
-                ).whenComplete(() => {_calendarFormat = CalendarFormat.month});
+                );
               }
             },
             onPageChanged: (focusedDay) {
