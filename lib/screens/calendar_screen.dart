@@ -26,38 +26,29 @@ class _CalendarScreen extends State<CalendarScreen> {
     _selectedDay = _focusedDay;
     //サンプルのイベントリスト
     _eventsList = {
-      DateTime.now().subtract(Duration(days: 2)): [
-        [
-          true,
-          '課題提出',
-          ['資料', '12時まで']
-        ],
-        [
-          true,
-          'プレゼン日',
-          ['パソコン', 'やる気']
-        ]
+      DateTime.utc(2021, 9, 18): [
+        [true, '課題提出', '資料', '10:00'],
+        [true, 'プレゼン日', 'パソコン', '14:00']
       ],
       DateTime.now(): [
-        [true, '誕生日プレゼント買う'],
-        [true, '会議'],
-        [false, 'ジム'],
-        [false, 'お風呂洗う']
+        [true, '誕生日プレゼント買う', '予算1万', '11:00'],
+        [true, '会議', '資料', '13:00'],
+        [false, 'ジム', 'プロテイン', '16:00'],
+        [false, 'お風呂洗う', '予算1万', '20:00']
       ],
       DateTime.now().add(Duration(days: 1)): [
-        [false, 'バイト'],
-        [false, 'Loft行く'],
-        [false, '資料室行く'],
-        [false, '参考書買う']
+        [false, 'バイト', '', '9:00'],
+        [false, 'Loft行く', '', '15:00'],
+        [false, '図書館行く', 'サピエンス全史', '16:00']
       ],
       DateTime.now().add(Duration(days: 7)): [
-        [false, '散髪'],
-        [false, 'おばあちゃんの家行く'],
-        [false, '漫画返す']
+        [false, '散髪', '5000円', '10:00'],
+        [false, 'ばあちゃんの家行く', 'お土産', '12:00'],
+        [false, '漫画返す', '', '20:00']
       ],
       DateTime.now().add(Duration(days: 11)): [
-        [false, 'シフト提出'],
-        [false, '面接']
+        [false, 'シフト提出', '', ''],
+        [false, '面接', 'やる気', '14:00'],
       ],
     };
   }
@@ -102,105 +93,78 @@ class _CalendarScreen extends State<CalendarScreen> {
                   context: context,
                   // isDismissible: false,
                   isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) => Container(
-                    height: MediaQuery.of(context).size.height * 0.70,
-                    child: Container(
-                      color: Color(0xff7C7C7C).withOpacity(1),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              spreadRadius: 1.0,
-                              blurRadius: 10.0,
-                              offset: Offset(10, 10),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 25),
-                          child: Column(
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  Text(
-                                    'Task',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 200),
-                                  ),
-                                  FloatingActionButton(
-                                    backgroundColor: Colors.blue,
-                                    foregroundColor: Colors.black,
-                                    onPressed: () {
-                                      // Provider.of<TaskData>(context, listen: false).addTasks(newTask);
-                                      // Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => AddTask(),
-                                          ));
-                                    },
-                                    child: Icon(Icons.add),
+                  // backgroundColor: Colors.transparent,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(
+                      builder: (BuildContext context, setState) {
+                        return Container(
+                          height: MediaQuery.of(context).size.height * 0.70,
+                          child: Container(
+                            color: Color(0xff7C7C7C).withOpacity(1),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    spreadRadius: 1.0,
+                                    blurRadius: 10.0,
+                                    offset: Offset(10, 10),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 10),
-                              Container(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 25),
                                 child: Column(
-                                  children: [
-                                    ListView(
-                                      shrinkWrap: true,
-                                      children: _getEventForDay(_selectedDay!)
-                                          .map((event) => Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                      Radius.circular(5),
-                                                    ),
-                                                    color: Colors.blue,
-                                                  ),
-                                                  child: ListTile(
-                                                    leading: Checkbox(
-                                                      value: event[0],
-                                                      onChanged: (value) {
-                                                        event[0] = value;
-                                                        setState(() {});
-                                                      },
-                                                    ),
-                                                    title: Text(
-                                                      event[1].toString(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ))
-                                          .toList(),
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'タスク',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 190),
+                                        ),
+                                        FloatingActionButton(
+                                          backgroundColor: Colors.blue,
+                                          foregroundColor: Colors.black,
+                                          onPressed: () {
+                                            // Provider.of<TaskData>(context, listen: false).addTasks(newTask);
+                                            // Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddTask(_eventsList),
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(Icons.add),
+                                        ),
+                                      ],
                                     ),
+                                    SizedBox(height: 10),
+                                    TaskList(_getEventForDay),
                                   ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        );
+                      },
+                    );
+                  },
                 );
               }
             },
@@ -208,6 +172,78 @@ class _CalendarScreen extends State<CalendarScreen> {
               _focusedDay = focusedDay;
             },
             locale: 'ja_JP',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container TaskList(List<dynamic> _getEventForDay(DateTime day)) {
+    return Container(
+      child: Column(
+        children: [
+          ListView(
+            shrinkWrap: true,
+            children: _getEventForDay(_selectedDay!)
+                .map((event) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                          color: Colors.blue,
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            setState(() {
+                              event[0] = !event[0];
+                            });
+                          },
+                          onLongPress: () {},
+                          leading: Checkbox(
+                            value: event[0],
+                            onChanged: (bool? value) {
+                              setState(() {
+                                event[0] = value;
+                              });
+                            },
+                          ),
+                          title: Text(
+                            event[1].toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                          ),
+                          subtitle: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: Container(
+                              child: Card(
+                                color: Colors.white,
+                                child: Text(
+                                  event[2].toString(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          trailing: Text(
+                            event[3].toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList(),
           ),
         ],
       ),
