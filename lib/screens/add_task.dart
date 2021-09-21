@@ -36,22 +36,6 @@ class _AddTaskState extends State<AddTask> {
 
   int _counter = 0;
 
-  void _addTask(String taskname, String forget) {
-    setState(() {
-      // DateTime.utc(2021, 9, 20): [
-      //     true,
-      //     '課題提出',
-      //     '資料',
-      //     '10:00',
-      //   ],
-      widget.eventsList[0]!.add(false);
-      widget.eventsList[1]!.add(taskname);
-      widget.eventsList[2]!.add(forget);
-      widget.eventsList[3]!.add('12:00');
-      setNotification();
-    });
-  }
-
   @override
   // widgetの破棄時にコントローラも破棄する
   void dispose() {
@@ -109,7 +93,7 @@ class _AddTaskState extends State<AddTask> {
           // myController.text で入力されたテキストフィールドの内容を取得
           // 以下の_addItemは自分で定義済の関数
           // _addTask(taskController.text, forgetController.text);
-          setNotification();
+          setNotification(taskController.text, forgetController.text);
           // テキストフィールドの内容をクリアする
           taskController.clear();
           forgetController.clear();
@@ -121,7 +105,7 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  void setNotification() async {
+  void setNotification(String title, String forget) async {
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
         IOSNotificationDetails(
             // sound: 'example.mp3',
@@ -134,8 +118,8 @@ class _AddTaskState extends State<AddTask> {
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
-      '筋トレの時間です',
-      'プロテインを忘れないでください。',
+      '${title}の時間です',
+      '${forget}を忘れないでください。',
       tz.TZDateTime.now(tz.UTC).add(const Duration(seconds: 10)),
       const NotificationDetails(
           android: AndroidNotificationDetails(
@@ -144,5 +128,20 @@ class _AddTaskState extends State<AddTask> {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
+  }
+
+  void _addTask(String taskname, String forget) {
+    setState(() {
+      // DateTime.utc(2021, 9, 20): [
+      //     true,
+      //     '課題提出',
+      //     '資料',
+      //     '10:00',
+      //   ],
+      widget.eventsList[0]!.add(false);
+      widget.eventsList[1]!.add(taskname);
+      widget.eventsList[2]!.add(forget);
+      widget.eventsList[3]!.add('12:00');
+    });
   }
 }
